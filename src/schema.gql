@@ -1,0 +1,74 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Ballot {
+  app_id: Int!
+  created_by: String!
+  id: Int!
+  name: String!
+}
+
+type BallotEntry {
+  ballot_id: Int!
+  created_by: String!
+  id: Int!
+  row: Int!
+  table_name: String!
+}
+
+input BallotEntryInput {
+  ballot_id: Int!
+  created_by: String!
+  row: Int!
+  table_name: String!
+}
+
+type BallotEntryOutput {
+  ballotEntry: BallotEntry!
+}
+
+input BallotInput {
+  app_id: Int!
+  created_by: String!
+  name: String!
+}
+
+type BallotOutput {
+  ballot: Ballot!
+}
+
+type Mutation {
+  createBallot(input: BallotInput!): BallotOutput!
+  createBallotEntry(input: BallotEntryInput!): BallotEntryOutput!
+  createVote(input: VoteInput!): VoteOutput!
+  delete(id: Float!): Boolean!
+  deleteBallot(id: Float!): Boolean!
+  deleteBallotEntry(id: Float!): Boolean!
+}
+
+type Query {
+  ballot(id: Float!): Ballot!
+  ballotEntries: [BallotEntry!]!
+  ballotEntry(id: Float!): BallotEntry!
+  ballots: [Ballot!]!
+  vote(id: Float!): Vote!
+  votes: [Vote!]!
+}
+
+type Vote {
+  ballot_entry_id: Int!
+  id: Int!
+  up: Boolean!
+  user_id: String!
+}
+
+input VoteInput {
+  ballot_entry_id: Int!
+  up: Boolean!
+  user_id: String!
+}
+
+type VoteOutput {
+  vote: Vote!
+}
