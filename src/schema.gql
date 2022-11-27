@@ -2,24 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Ballot {
-  app_id: Int!
-  created_by: String!
-  id: Int!
-  name: String!
-}
-
 type BallotEntry {
-  ballot_id: Int!
   created_by: String!
+  election_id: Int!
   id: Int!
   row: Int!
   table_name: String!
 }
 
 input BallotEntryInput {
-  ballot_id: Int!
   created_by: String!
+  election_id: Int!
   row: Int!
   table_name: String!
 }
@@ -28,35 +21,62 @@ type BallotEntryOutput {
   ballotEntry: BallotEntry!
 }
 
-input BallotInput {
+type Election {
+  app_id: Int!
+  created_by: String!
+  id: Int!
+  name: String!
+  row: Int!
+  table_name: String!
+}
+
+input ElectionIdInput {
+  row: Int!
+  table_name: String!
+}
+
+input ElectionInput {
   app_id: Int!
   created_by: String!
   name: String!
+  row: Int!
+  table_name: String!
 }
 
-type BallotOutput {
-  ballot: Ballot!
+type ElectionOutput {
+  election: Election!
 }
 
 type Mutation {
-  createBallot(input: BallotInput!): BallotOutput!
   createBallotEntry(input: BallotEntryInput!): BallotEntryOutput!
+  createElection(input: ElectionInput!): ElectionOutput!
   createVote(input: VoteInput!): VoteOutput!
-  delete(id: Float!): Boolean!
-  deleteBallot(id: Float!): Boolean!
   deleteBallotEntry(id: Float!): Boolean!
+  deleteElection(id: Float!): Boolean!
+  deleteVote(id: Float!): Boolean!
+  updateVote(input: UpdateVote!): Vote!
 }
 
 type Query {
-  ballot(id: Float!): Ballot!
   ballotEntries: [BallotEntry!]!
   ballotEntry(id: Float!): BallotEntry!
-  ballots: [Ballot!]!
+  ballotEntryByRowId(row: Float!): BallotEntry!
+  election(id: Float!): Election!
+  electionByTableName(input: ElectionIdInput!): Election!
+  elections: [Election!]!
   vote(id: Float!): Vote!
-  votes: [Vote!]!
+  votes(user_id: String): [Vote!]!
+}
+
+input UpdateVote {
+  ballot_entry_id: Int
+  up: Boolean!
+  user_id: String!
+  vote_id: Int!
 }
 
 type Vote {
+  ballot_entry: BallotEntry!
   ballot_entry_id: Int!
   id: Int!
   up: Boolean!

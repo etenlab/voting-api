@@ -3,7 +3,7 @@ import { BallotEntry } from '../ballot-entry.model';
 
 @InputType()
 export class BallotEntryInput {
-  @Field(() => Int) ballot_id: number;
+  @Field(() => Int) election_id: number;
   @Field(() => String) table_name: string;
   @Field(() => Int) row: number;
   @Field(() => String) created_by: string;

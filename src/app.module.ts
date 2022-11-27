@@ -5,7 +5,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
-import { BallotModule } from './components/ballots/ballot.module';
+import { ElectionModule } from './components/elections/election.module';
 import { BallotEntryModule } from './components/ballot-entries/ballot-entry.module';
 import { VoteModule } from './components/votes/vote.module';
 dotenv.config();
@@ -32,7 +32,7 @@ dotenv.config();
       autoLoadEntities: true,
       synchronize: true,
     }),
-    BallotModule,
+    ElectionModule,
     BallotEntryModule,
     VoteModule,
   ],

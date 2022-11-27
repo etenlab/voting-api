@@ -17,12 +17,16 @@ export class Vote {
   @Field(() => Int)
   id: number;
 
-  @Field(() => Int)
   @ManyToOne(() => BallotEntry, (ballotEntry) => ballotEntry.id, {
     nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'ballot_entry_id' })
+  @Field(() => BallotEntry)
+  ballot_entry: BallotEntry;
+
+  @Column()
+  @Field(() => Int)
   ballot_entry_id: number;
 
   @Column()

@@ -1,10 +1,10 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
-@Entity('ballots')
+@Entity('elections')
 @Unique(['app_id', 'name'])
 @ObjectType()
-export class Ballot {
+export class Election {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   @Field(() => Int)
   id: number;
@@ -16,6 +16,14 @@ export class Ballot {
   @Column()
   @Field(() => String)
   name: string;
+
+  @Column()
+  @Field(() => String)
+  table_name: string;
+
+  @Column()
+  @Field(() => Int)
+  row: number;
 
   @Column()
   @Field(() => String)

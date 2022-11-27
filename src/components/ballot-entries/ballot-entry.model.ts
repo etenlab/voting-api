@@ -6,32 +6,35 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Ballot } from '../ballots/ballot.model';
+import { Election } from '../elections/election.model';
 
-@Entity('ballot_entries', { synchronize: false })
+@Entity('ballot_entries', { synchronize: false, schema: 'admin' })
 @ObjectType()
 export class BallotEntry {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;
 
-  @Field(() => Int)
-  @ManyToOne(() => Ballot, (ballot) => ballot.id, {
+  @ManyToOne(() => Election, (election) => election.id, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'ballot_id' })
-  ballot_id: number;
-
-  @Column()
-  @Field(() => String)
-  table_name: string;
+  @JoinColumn({ name: 'election_id' })
+  election: Election;
 
   @Column()
   @Field(() => Int)
+  election_id: number;
+
+  @Column({ default: 'site_text_keys' })
+  @Field(() => String)
+  table_name: string;
+
+  @Column({ default: 0 })
+  @Field(() => Int)
   row: number;
 
-  @Column()
+  @Column({ default: 'user_id' })
   @Field(() => String)
   created_by: string;
 }

@@ -19,6 +19,9 @@ export class BallotEntryService {
   async read(ballotEntryId: number): Promise<BallotEntry> {
     const ballotEntry = this.ballotEntryRepository.findOne({
       where: { id: ballotEntryId },
+      relations: {
+        election: true,
+      },
     });
 
     if (!ballotEntry) {
@@ -30,8 +33,24 @@ export class BallotEntryService {
     return ballotEntry;
   }
 
+  async readByRowId(rowId: number): Promise<BallotEntry> {
+    const ballotEntry = this.ballotEntryRepository.findOne({
+      where: { row: rowId },
+    });
+
+    if (!ballotEntry) {
+      throw new NotFoundException(
+        `Ballot Entry with row ${rowId} was not found`,
+      );
+    }
+
+    return ballotEntry;
+  }
+
   async list() {
-    return this.ballotEntryRepository.find();
+    return this.ballotEntryRepository.find({
+      relations: { election: true },
+    });
   }
 
   async delete(ballotEntryId: number): Promise<boolean> {

@@ -2,6 +2,7 @@ import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { Vote } from './vote.model';
 import { VoteService } from './vote.service';
 import { VoteInput, VoteOutput } from './dto/create-vote.dto';
+import { UpdateVote } from './dto/update-vote.dto';
 
 @Resolver(Vote)
 export class VoteResolver {
@@ -19,12 +20,19 @@ export class VoteResolver {
   }
 
   @Query(() => [Vote])
-  async votes(): Promise<Vote[]> {
-    return await this.service.list();
+  async votes(
+    @Args('user_id', { nullable: true }) user_id?: string,
+  ): Promise<Vote[]> {
+    return await this.service.list(user_id);
+  }
+
+  @Mutation(() => Vote)
+  async updateVote(@Args('input') input: UpdateVote) {
+    return await this.service.update(input);
   }
 
   @Mutation(() => Boolean)
-  async delete(@Args('id') id: number): Promise<boolean> {
+  async deleteVote(@Args('id') id: number): Promise<boolean> {
     return this.service.delete(id);
   }
 }

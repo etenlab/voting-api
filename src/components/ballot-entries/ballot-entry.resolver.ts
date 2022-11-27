@@ -28,6 +28,11 @@ export class BallotEntryResolver {
     return await this.servivce.list();
   }
 
+  @Query(() => BallotEntry)
+  async ballotEntryByRowId(@Args('row') row: number): Promise<BallotEntry> {
+    return await this.servivce.readByRowId(row);
+  }
+
   @Mutation(() => Boolean)
   async deleteBallotEntry(@Args('id') id: number): Promise<boolean> {
     return await this.servivce.delete(id);
