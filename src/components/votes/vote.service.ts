@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { VoteInput } from './dto/create-vote.dto';
 import { UpdateVote } from './dto/update-vote.dto';
+import { VoteStat } from './dto/vote-stats.dto';
 import { Vote } from './vote.model';
 
 export class VoteService {
@@ -13,7 +14,8 @@ export class VoteService {
 
   async create(input: VoteInput): Promise<Vote> {
     const vote = this.voteRepository.create(input);
-    return await this.voteRepository.save(vote);
+    await this.voteRepository.save(vote);
+    return await this.read(vote.id);
   }
 
   async read(voteId: number): Promise<Vote> {
@@ -27,6 +29,18 @@ export class VoteService {
     }
 
     return vote;
+  }
+
+  async getStats(election_id?: number): Promise<VoteStat[]> {
+    return this.voteRepository.query(`
+    SELECT be.id as ballot_entry_id, be.row,
+    COUNT(CASE WHEN v.up = true then 1 else null end) as up, 
+    COUNT(CASE WHEN v.up = false then 1 else null end) as down 
+    FROM admin.votes AS v
+    JOIN admin.ballot_entries as be ON v.ballot_entry_id = be.id
+    WHERE be.election_id = ${election_id}
+    GROUP BY be.id
+    ORDER BY COUNT(CASE WHEN v.up = true then 1 else null end) desc;`);
   }
 
   async list(user_id?: string): Promise<Vote[]> {
