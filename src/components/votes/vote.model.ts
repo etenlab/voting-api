@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { BallotEntry } from '../ballot-entries/ballot-entry.model';
 
-@Entity('votes')
+@Entity('votes', { synchronize: false })
 @Unique(['user_id', 'ballot_entry_id'])
 @ObjectType()
 export class Vote {

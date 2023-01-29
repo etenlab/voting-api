@@ -86,6 +86,7 @@ type Query {
   elections: [Election!]!
   vote(id: Float!): Vote!
   votes(user_id: String): [Vote!]!
+  votesStats(election_id: Float!): [VoteStat!]!
 }
 
 input UpdateVote {
@@ -110,6 +111,14 @@ input VoteInput {
 
 type VoteOutput {
   vote: Vote!
+}
+
+
+type VoteStat {
+  ballot_entry_id: Int!
+  down: Int!
+  row: Int!
+  up: Int!
 }
 
 scalar link__Import

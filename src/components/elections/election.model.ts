@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
-@Entity('elections')
+@Entity('elections', { synchronize: false })
 @Unique(['app_id', 'name'])
 @ObjectType()
 export class Election {

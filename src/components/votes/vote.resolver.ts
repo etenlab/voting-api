@@ -3,6 +3,7 @@ import { Vote } from './vote.model';
 import { VoteService } from './vote.service';
 import { VoteInput, VoteOutput } from './dto/create-vote.dto';
 import { UpdateVote } from './dto/update-vote.dto';
+import { VoteStat } from './dto/vote-stats.dto';
 
 @Resolver(Vote)
 export class VoteResolver {
@@ -24,6 +25,11 @@ export class VoteResolver {
     @Args('user_id', { nullable: true }) user_id?: string,
   ): Promise<Vote[]> {
     return await this.service.list(user_id);
+  }
+
+  @Query(() => [VoteStat])
+  async votesStats(@Args('election_id') election_id: number) {
+    return await this.service.getStats(election_id);
   }
 
   @Mutation(() => Vote)
