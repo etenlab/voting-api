@@ -9,20 +9,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Prepare Node 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: Install Nest
-        run: npm i -g @nestjs/cli
-
-      - name: Build
-        run: nest build 
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
