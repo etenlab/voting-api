@@ -12,6 +12,7 @@ import * as dotenv from 'dotenv';
 import { ElectionModule } from './components/elections/election.module';
 import { BallotEntryModule } from './components/ballot-entries/ballot-entry.module';
 import { VoteModule } from './components/votes/vote.module';
+import { QuestionModule } from './components/questionsAndAnswers/question.module';
 import { AppController } from './app.controller';
 dotenv.config();
 
@@ -39,6 +40,7 @@ dotenv.config();
     }),
     ElectionModule,
     BallotEntryModule,
+    QuestionModule,
     VoteModule,
   ],
   controllers: [AppController],

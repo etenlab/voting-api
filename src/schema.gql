@@ -22,6 +22,16 @@ directive @shareable on FIELD_DEFINITION | OBJECT
 
 directive @tag(name: String!) repeatable on ARGUMENT_DEFINITION | ENUM | ENUM_VALUE | FIELD_DEFINITION | INPUT_FIELD_DEFINITION | INPUT_OBJECT | INTERFACE | OBJECT | SCALAR | UNION
 
+type Answer {
+  id: Int!
+  text: String
+}
+
+input AnswerInput {
+  feedback: String
+  text: String
+}
+
 type BallotEntry {
   created_by: String!
   election_id: Int!
@@ -68,12 +78,16 @@ type ElectionOutput {
 }
 
 type Mutation {
+  addQuestionType(type: String!): QuestionType!
+  addVotable(tableName: String!): Votable!
   createBallotEntry(input: BallotEntryInput!): BallotEntryOutput!
   createElection(input: ElectionInput!): ElectionOutput!
+  createQuestion(input: QuestionInput!): QuestionOutput!
   createVote(input: VoteInput!): VoteOutput!
   deleteBallotEntry(id: Float!): Boolean!
   deleteElection(id: Float!): Boolean!
   deleteVote(id: Float!): Boolean!
+  submit(input: SubmitAnswerInput!): [VoteOutput!]!
   updateVote(input: UpdateVote!): Vote!
 }
 
@@ -84,15 +98,51 @@ type Query {
   election(id: Float!): Election!
   electionByTableName(input: ElectionIdInput!): Election!
   elections: [Election!]!
+  question(id: Float!): Question!
   vote(id: Float!): Vote!
   votes(user_id: String): [Vote!]!
   votesStats(election_id: Float!): [VoteStat!]!
+}
+
+type Question {
+  answers: [Answer!]
+  id: Int!
+  text: String!
+  type: String!
+}
+
+input QuestionInput {
+  answers: [AnswerInput!]!
+  appId: Float!
+  text: String!
+  type: String!
+  userId: String!
+}
+
+type QuestionOutput {
+  question: Question!
+}
+
+type QuestionType {
+  questionType: String!
+}
+
+input SubmitAnswerInput {
+  answersInput: [AnswerInput!]!
+  questionId: Float!
+  type: String!
+  up: Boolean
+  userId: String!
 }
 
 input UpdateVote {
   up: Boolean!
   user_id: String!
   vote_id: Int!
+}
+
+type Votable {
+  tableName: String!
 }
 
 type Vote {
@@ -112,7 +162,6 @@ input VoteInput {
 type VoteOutput {
   vote: Vote!
 }
-
 
 type VoteStat {
   ballot_entry_id: Int!

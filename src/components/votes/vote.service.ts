@@ -4,12 +4,14 @@ import { Repository } from 'typeorm';
 import { VoteInput } from './dto/create-vote.dto';
 import { UpdateVote } from './dto/update-vote.dto';
 import { VoteStat } from './dto/vote-stats.dto';
-import { Vote } from './vote.model';
+import { Votable, Vote } from './vote.model';
 
 export class VoteService {
   constructor(
     @InjectRepository(Vote)
     private voteRepository: Repository<Vote>,
+    @InjectRepository(Votable)
+    private votableRepository: Repository<Votable>,
   ) {}
 
   async create(input: VoteInput): Promise<Vote> {
@@ -29,6 +31,10 @@ export class VoteService {
     }
 
     return vote;
+  }
+
+  async addVotable(tableName: string) {
+    return await this.votableRepository.save({ tableName });
   }
 
   async getStats(election_id?: number): Promise<VoteStat[]> {

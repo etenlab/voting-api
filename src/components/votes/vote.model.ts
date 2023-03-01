@@ -37,3 +37,11 @@ export class Vote {
   @Field(() => Boolean)
   up: boolean;
 }
+
+@Entity('votables', { synchronize: false })
+@ObjectType()
+export class Votable {
+  @PrimaryGeneratedColumn({ name: 'table_name' })
+  @Field(() => String)
+  tableName: string;
+}

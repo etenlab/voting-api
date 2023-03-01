@@ -1,5 +1,5 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
-import { Vote } from './vote.model';
+import { Votable, Vote } from './vote.model';
 import { VoteService } from './vote.service';
 import { VoteInput, VoteOutput } from './dto/create-vote.dto';
 import { UpdateVote } from './dto/update-vote.dto';
@@ -40,5 +40,10 @@ export class VoteResolver {
   @Mutation(() => Boolean)
   async deleteVote(@Args('id') id: number): Promise<boolean> {
     return this.service.delete(id);
+  }
+
+  @Mutation(() => Votable)
+  async addVotable(@Args('tableName') tableName: string): Promise<Votable> {
+    return this.service.addVotable(tableName);
   }
 }
