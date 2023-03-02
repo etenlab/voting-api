@@ -27,6 +27,12 @@ export class QuestionService {
   ) {}
 
   async createQuestion(input: QuestionInput): Promise<Question> {
+    const questionType = await this.questionTypeRepository.find({
+      where: { questionType: input.type },
+    });
+
+    if (!questionType.length) await this.addQuestionType(input.type);
+
     const question = await this.questionRepository.save(input);
     await this.electionRepository.save({
       app_id: input.appId,
