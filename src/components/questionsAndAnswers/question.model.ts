@@ -22,7 +22,7 @@ export class Question {
   answers?: Answer[];
 }
 
-@Entity('question_type', { synchronize: false })
+@Entity('question_types', { synchronize: false })
 @ObjectType()
 export class QuestionType {
   @PrimaryGeneratedColumn({ name: 'question_type' })

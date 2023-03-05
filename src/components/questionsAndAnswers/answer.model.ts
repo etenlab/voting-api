@@ -19,6 +19,10 @@ export class Answer {
   @Field(() => String, { nullable: true })
   text?: string;
 
+  @Column({ nullable: true })
+  @Field(() => String, { nullable: true })
+  feedback?: string;
+
   @Column()
   question_id: number;
 

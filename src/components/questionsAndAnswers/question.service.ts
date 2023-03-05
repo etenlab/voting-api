@@ -42,7 +42,7 @@ export class QuestionService {
       created_by: input.userId,
     });
 
-    if (question.type !== 'Text')
+    if (question.type !== 'Normal')
       await this.createAnswers(question.id, input.answers, input.userId);
 
     return question;
@@ -100,7 +100,7 @@ export class QuestionService {
   async submit(input: SubmitAnswerInput) {
     const { questionId, answersInput, type, userId, up } = input;
     let answer = null;
-    if (type === 'Text') {
+    if (type === 'Normal') {
       answer = await this.createAnswers(
         questionId,
         [{ text: answersInput[0].text }],
@@ -122,7 +122,7 @@ export class QuestionService {
         questionId,
         type === 'True/False'
           ? ''
-          : type === 'Text'
+          : type === 'Normal'
           ? [answer]
           : answersInput.map((answer) => answer.text),
       ],
