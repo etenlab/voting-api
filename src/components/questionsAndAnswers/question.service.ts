@@ -53,7 +53,7 @@ export class QuestionService {
     input: AnswerInput[],
     userId: string,
   ) {
-    const question = await this.read(questionId);
+    const question = await this.getQuestion(questionId);
     const answersInput = input.map((answer) => {
       if (['True/False', 'Agree/Disagree'].includes(question.type))
         answer.text = null;
@@ -80,7 +80,7 @@ export class QuestionService {
     return answers;
   }
 
-  async read(questionId: number): Promise<Question> {
+  async getQuestion(questionId: number): Promise<Question> {
     const question = this.questionRepository.findOne({
       where: { id: questionId },
       relations: ['answers'],
@@ -93,11 +93,15 @@ export class QuestionService {
     return question;
   }
 
+  async getQuestions() {
+    return await this.questionRepository.find();
+  }
+
   async addQuestionType(type: string) {
     return await this.questionTypeRepository.save({ questionType: type });
   }
 
-  async submit(input: SubmitAnswerInput) {
+  async submitAnswer(input: SubmitAnswerInput) {
     const { questionId, answersInput, type, userId, up } = input;
     let answer = null;
     if (type === 'Normal') {
@@ -114,7 +118,9 @@ export class QuestionService {
       SELECT be.id
       FROM admin.ballot_entries be
       JOIN (SELECT id FROM admin.answers WHERE question_id = $1 AND ${
-        type === 'True/False' ? `(text <> $2) IS NOT TRUE` : 'text = ANY($2)'
+        ['True/False', 'Agree/Disagree'].includes(type)
+          ? `(text <> $2) IS NOT TRUE`
+          : 'text = ANY($2)'
       }) answ
       ON be.row = answ.id;
       `,

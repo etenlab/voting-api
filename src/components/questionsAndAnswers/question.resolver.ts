@@ -19,12 +19,17 @@ export class QuestionResolver {
 
   @Query(() => Question)
   async question(@Args('id') id: number): Promise<Question> {
-    return await this.service.read(id);
+    return await this.service.getQuestion(id);
+  }
+
+  @Query(() => [Question])
+  async questions(): Promise<Question[]> {
+    return await this.service.getQuestions();
   }
 
   @Mutation(() => [VoteOutput])
   async submit(@Args('input') input: SubmitAnswerInput): Promise<VoteOutput[]> {
-    const votes = await this.service.submit(input);
+    const votes = await this.service.submitAnswer(input);
     return votes.map((vote) => {
       return { vote };
     });

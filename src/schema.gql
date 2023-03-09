@@ -100,6 +100,7 @@ type Query {
   electionByTableName(input: ElectionIdInput!): Election!
   elections: [Election!]!
   question(id: Float!): Question!
+  questions: [Question!]!
   vote(id: Float!): Vote!
   votes(user_id: String): [Vote!]!
   votesStats(election_id: Float!): [VoteStat!]!
