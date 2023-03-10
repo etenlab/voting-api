@@ -54,19 +54,27 @@ export class QuestionService {
     userId: string,
   ) {
     const question = await this.getQuestion(questionId);
-    const answersInput = input.map((answer) => {
-      if (['True/False', 'Agree/Disagree'].includes(question.type))
-        answer.text = null;
+    let answersInput = null;
 
-      answer.question = question;
-      return answer;
-    });
+    if (['True/False', 'Agree/Disagree'].includes(question.type)) {
+      answersInput = {
+        question: question,
+        text: null,
+      };
+    } else {
+      answersInput = input.map((answer) => {
+        answer.question = question;
+        return answer;
+      });
+    }
 
     const election = await this.electionRepository.findOne({
       where: { row: questionId },
     });
 
-    const answers = await this.answerRepository.save(answersInput);
+    let answers = await this.answerRepository.save(answersInput);
+    answers = Array.isArray(answers) ? answers : [answers];
+
     const ballotEntriesInput = answers.map((answer) => {
       return {
         row: answer.id,
@@ -104,6 +112,7 @@ export class QuestionService {
   async submitAnswer(input: SubmitAnswerInput) {
     const { questionId, answersInput, type, userId, up } = input;
     let answer = null;
+
     if (type === 'Normal') {
       answer = await this.createAnswers(
         questionId,
@@ -120,16 +129,18 @@ export class QuestionService {
       JOIN (SELECT id FROM admin.answers WHERE question_id = $1 AND ${
         ['True/False', 'Agree/Disagree'].includes(type)
           ? `(text <> $2) IS NOT TRUE`
-          : 'text = ANY($2)'
+          : `text = ANY($2) ${
+              type === 'Normal' ? `AND id = ${answer[0].id}` : ''
+            }`
       }) answ
       ON be.row = answ.id;
       `,
       [
         questionId,
-        type === 'True/False'
+        ['True/False', 'Agree/Disagree'].includes(type)
           ? ''
           : type === 'Normal'
-          ? [answer]
+          ? [answer[0]?.text]
           : answersInput.map((answer) => answer.text),
       ],
     );

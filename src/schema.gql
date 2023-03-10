@@ -114,7 +114,7 @@ type Question {
 }
 
 input QuestionInput {
-  answers: [AnswerInput!]!
+  answers: [AnswerInput!]
   appId: Float!
   text: String!
   type: String!
@@ -130,7 +130,7 @@ type QuestionType {
 }
 
 input SubmitAnswerInput {
-  answersInput: [AnswerInput!]!
+  answersInput: [AnswerInput!]
   questionId: Float!
   type: String!
   up: Boolean
