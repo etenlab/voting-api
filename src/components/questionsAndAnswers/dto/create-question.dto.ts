@@ -7,7 +7,7 @@ export class QuestionInput {
   @Field(() => String) userId: string;
   @Field(() => String) text: string;
   @Field(() => String) type: string;
-  @Field(() => [AnswerInput]) answers?: AnswerInput[];
+  @Field(() => [AnswerInput], { nullable: true }) answers?: AnswerInput[];
 }
 
 @InputType()
